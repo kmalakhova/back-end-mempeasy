@@ -1,55 +1,69 @@
-# from example import get_word_example
-# from word import word
+from example import get_word_example
+from word import get_random_word
 from random import choice, randint
+import re
 
+def has_capital_letter(content):
+    return any(word[0] == word[0].upper() for word in content)
 
-def build_password():
-    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?"]
-    # sentence = get_word_example(word)
-    sentence = "being a singer must be such a glamorous lifestyle!"
-    content = sentence.split() # RESPLIT
-    content = capitilize_random_word(content)
-    if not any_symbols(content, symbols):
-        content = add_symbol(content, symbols)
-    if not any_number(content):
-        content = add_number(content)
-    print(content)
-    # return content
-
-    # split to set
-    # capitalize random word
-    # if char in char - cool
-    #     not:
-    #         pick randoom
-    #         place random
-    # if char is number - cool
-    #     not:
-    #         pick randoom
-    #         place random
-
-def capitilize_random_word(content):
+def capitilize_random_word(content): 
     pick = ""
-    while len(pick) < 3:
+    while len(pick) < 2 or pick.isdigit():
         pick = choice(content)
     return [word.upper() if word == pick else word for word in content]
 
-def any_symbols(content,symbols):
+def has_symbol(content,symbols):
     return any(word in symbols for word in content)
 
 def add_symbol(content, symbols):
     symbol = choice(symbols)
-    return [f"{word}{symbol}" if word == word.upper() else word for word in content]
+    l = []
+    for word in content:
+        l.extend([word, symbol]) if word == word.upper() else l.append(word)
+    return l
 
-def any_number(content):
+def has_number(content):
     return any(word.isdigit() for word in content)
 
 def add_number(content):
     num = randint(0, 10)
     N = len(content)
-    placement = randint(0, N-1)
-    return [f"{content[i]}{num}" if i == placement else content[i] for i in range(N)]
+    place = randint(0, N-1)
+    l = []
+    for i in range(N):
+        l.extend([content[i], str(num)]) if i == place else l.append(content[i])
+    return l
 
+def get_first_letters(content):
+    return [word if word[0] == word[0].upper() else word[0] for word in content]
 
+def get_hint():
+    hint = (get_word_example(get_random_word()))
+    # print(hint)
+    return hint
 
+def build_password():
+    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?"]
+    # sentence = get_hint()
+    sentence = "I fear he may have muddled the message"
+    content = re.findall(r"[\w']+|[.,!?;~@$*()+-=']", sentence)
+    if not has_capital_letter(content):
+        content = capitilize_random_word(content)
+    # print(f"The result of capitilize_random_word\n{content}")
+    if not has_symbol(content, symbols):
+        content = add_symbol(content, symbols)
+    # print(f"The result of add_symbol\n{content}")
+    if not has_number(content):
+        content = add_number(content)
+    # print(f"The result of add_number\n{content}")
+    content = get_first_letters(content)
+    # print(f"The result of get_first_letters\n{content}")
+    return content
 
-build_password()
+def get_password():
+    content = build_password()
+    password = "".join(content)
+    # print(password)
+    return password
+
+print((get_password()))
