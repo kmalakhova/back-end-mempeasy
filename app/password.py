@@ -4,18 +4,22 @@ from random import choice, randint
 import re
 
 def has_capital_letter(content):
-    return any(word[0] == word[0].upper() for word in content)
+    """Checks if a sentence contains capital letters"""
+    return any(word[0] == word[0].upper() and word.isalpha() for word in content)
 
-def capitilize_random_word(content): 
+def uppercase_random_word(content): 
+    """Converts a random word to uppercase"""
     pick = ""
     while len(pick) < 2 or pick.isdigit():
         pick = choice(content)
     return [word.upper() if word == pick else word for word in content]
 
 def has_symbol(content,symbols):
+    """Checks if a sentence contains special symbols"""
     return any(word in symbols for word in content)
 
 def add_symbol(content, symbols):
+    """Adds random symbol after an uppercase word"""
     symbol = choice(symbols)
     l = []
     for word in content:
@@ -23,9 +27,11 @@ def add_symbol(content, symbols):
     return l
 
 def has_number(content):
+    """Checks if a sentence contains a number"""
     return any(word.isdigit() for word in content)
 
 def add_number(content):
+    """Adds a random number to a random place in a sentence"""
     num = randint(0, 10)
     N = len(content)
     place = randint(0, N-1)
@@ -35,35 +41,27 @@ def add_number(content):
     return l
 
 def get_first_letters(content):
+    """Gets first characters of every word, except for the words in uppercase"""
     return [word if word[0] == word[0].upper() else word[0] for word in content]
 
-def get_hint():
-    hint = (get_word_example(get_random_word()))
-    # print(hint)
-    return hint
-
 def build_password():
+    """Builds secure password"""
     symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?"]
-    # sentence = get_hint()
-    sentence = "I fear he may have muddled the message"
-    content = re.findall(r"[\w']+|[.,!?;~@$*()+-=']", sentence)
+    hint = (get_word_example(get_random_word()))
+    content = re.findall(r"[\w']+|[.,!?;~@$*()+-=']", hint)
     if not has_capital_letter(content):
-        content = capitilize_random_word(content)
-    # print(f"The result of capitilize_random_word\n{content}")
+        content = uppercase_random_word(content)
     if not has_symbol(content, symbols):
         content = add_symbol(content, symbols)
-    # print(f"The result of add_symbol\n{content}")
     if not has_number(content):
         content = add_number(content)
-    # print(f"The result of add_number\n{content}")
     content = get_first_letters(content)
-    # print(f"The result of get_first_letters\n{content}")
-    return content
-
-def get_password():
-    content = build_password()
     password = "".join(content)
-    # print(password)
-    return password
+    return password, hint
 
-print((get_password()))
+def get_response():
+    """Gets password and a hint"""
+    password, hint = build_password()
+    return password, hint
+
+print(get_response())
