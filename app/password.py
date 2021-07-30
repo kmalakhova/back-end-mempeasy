@@ -64,4 +64,4 @@ def get_response():
     password, hint = build_password()
     return password, hint
 
-print(get_response())
+# print(get_response())
