@@ -1,17 +1,12 @@
-from flask import app
-from password import get_response
-from flask import jsonify
-from flask import request
+from flask import Blueprint
+from app.password import get_response
+from flask import json
 
-@app.route("/")
-def home():
-    # print("hello")
-    return "hello"
 
-@app.route('/get-password', methods=['GET'])
+app_bp = Blueprint("app", __name__, url_prefix="/")
+
+@app_bp.route("", methods=["GET"], strict_slashes=False)
 def start_process():
-    return jsonify(get_response())
+    password, hint = (get_response())
+    return json.dumps({"password":password, "hint":hint}, indent = 4)
 
-@app.route('/start_process', methods=['GET'])
-def start_process():
-    return jsonify(get_response())
