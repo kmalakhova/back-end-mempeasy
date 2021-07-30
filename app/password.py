@@ -1,16 +1,12 @@
-from example import get_word_example
-from word import get_random_word
+from app.example import get_word_example
+from app.word import get_random_word
 from random import choice, randint
 import re
 
-def has_capital_letter(content):
-    """Checks if a sentence contains capital letters"""
-    return any(word[0] == word[0].upper() and word.isalpha() for word in content)
-
 def uppercase_random_word(content): 
-    """Converts a random word to uppercase"""
+    """Converts random word(s) to uppercase"""
     pick = ""
-    while len(pick) < 2 or pick.isdigit():
+    while len(pick) < 3 or not pick.isalpha():
         pick = choice(content)
     return [word.upper() if word == pick else word for word in content]
 
@@ -19,11 +15,11 @@ def has_symbol(content,symbols):
     return any(word in symbols for word in content)
 
 def add_symbol(content, symbols):
-    """Adds random symbol after an uppercase word"""
+    """Adds random symbol after uppercase word(s)"""
     symbol = choice(symbols)
     l = []
     for word in content:
-        l.extend([word, symbol]) if word == word.upper() else l.append(word)
+        l.extend([word, symbol]) if word == word.upper() and word.isalpha() else l.append(word)
     return l
 
 def has_number(content):
@@ -42,15 +38,14 @@ def add_number(content):
 
 def get_first_letters(content):
     """Gets first characters of every word, except for the words in uppercase"""
-    return [word if word[0] == word[0].upper() else word[0] for word in content]
+    return [word if word == word.upper() else word[0] for word in content]
 
 def build_password():
     """Builds secure password"""
-    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?"]
+    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?",","]
     hint = (get_word_example(get_random_word()))
     content = re.findall(r"[\w']+|[.,!?;~@$*()+-=']", hint)
-    if not has_capital_letter(content):
-        content = uppercase_random_word(content)
+    content = uppercase_random_word(content)
     if not has_symbol(content, symbols):
         content = add_symbol(content, symbols)
     if not has_number(content):
@@ -63,5 +58,3 @@ def get_response():
     """Gets password and a hint"""
     password, hint = build_password()
     return password, hint
-
-# print(get_response())
