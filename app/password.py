@@ -1,5 +1,5 @@
-from app.example import get_word_example
-from app.word import get_random_word
+# from app.example import get_word_example
+# from app.word import get_random_word
 from random import choice, randint
 import re
 
@@ -42,9 +42,13 @@ def get_first_letters(content):
 
 def build_password():
     """Builds secure password"""
-    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?",","]
-    hint = (get_word_example(get_random_word()))
-    content = re.findall(r"[\w']+|[.,!?;~@$*()+-=']", hint)
+    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?"] #
+    # hint = (get_word_example(get_random_word()))
+
+    hint = choice(["only ginger can call another ginger ginger", "Luke, I am your father", "I'm gonna make him an offer he can't refuse", "You're gonna need a bigger boat"]).lower()
+
+    content = re.findall(r"[\w']+|[!?;~@$*()+='-]", hint) #
+
     content = uppercase_random_word(content)
     if not has_symbol(content, symbols):
         content = add_symbol(content, symbols)
@@ -58,3 +62,5 @@ def get_response():
     """Gets password and a hint"""
     password, hint = build_password()
     return password, hint
+
+# print(get_response())

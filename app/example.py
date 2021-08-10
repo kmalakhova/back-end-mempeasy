@@ -12,9 +12,10 @@ def lower_all_letters(example):
 def get_word_example(word):
     """Retrieves sentences with a given word from a response body"""
     response_body = get_dictionary_entry(word)
-    word_examples = json_extract(response_body, 'text')
+    word_examples = set(json_extract(response_body, 'text'))
     for example in word_examples:
         if is_example_valid(example):
             example = lower_all_letters(example)
             return example
     return get_word_example(get_random_word())
+

@@ -26,7 +26,7 @@ def get_dictionary_entry(word):
     language = 'en-us'
     fields = 'examples'
     strictMatch = 'false'
-    url = f"{API_BASE_URL}:443/api/v2/entries/{language}/{word}?fields={fields}&strictMatch= {strictMatch};"
+    url = f"{API_BASE_URL}:443/api/v2/entries/{language}/{word}?fields={fields}&strictMatch={strictMatch};"
 
     response = get(url, headers = {'APP_ID': APP_ID, 'APP_KEY': APP_KEY})
 

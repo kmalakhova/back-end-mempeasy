@@ -8,7 +8,7 @@ def json_extract(obj, key):
             for k, v in obj.items():
                 if isinstance(v, (dict, list)):
                     extract(v, arr, key)
-                elif k == key:
+                elif k == key and len(v.split()) != 1:
                     arr.append(v)
         elif isinstance(obj, list):
             for item in obj:
