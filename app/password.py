@@ -1,5 +1,5 @@
-# from app.example import get_word_example
-# from app.word import get_random_word
+from app.example import get_word_example
+from app.word import get_random_word
 from random import choice, randint
 import re
 
@@ -10,7 +10,7 @@ def uppercase_random_word(content):
         pick = choice(content)
     return [word.upper() if word == pick else word for word in content]
 
-def has_symbol(content,symbols):
+def has_symbol(content, symbols):
     """Checks if a sentence contains special symbols"""
     return any(word in symbols for word in content)
 
@@ -40,14 +40,10 @@ def get_first_letters(content):
     """Gets first characters of every word, except for the words in uppercase"""
     return [word if word == word.upper() else word[0] for word in content]
 
-def build_password():
+def build_password(hint = get_word_example(get_random_word())):
     """Builds secure password"""
-    symbols = ["~","!","@","#","$","*","(",")","_","-","+","=","?"] #
-    # hint = (get_word_example(get_random_word()))
-
-    hint = choice(["only ginger can call another ginger ginger", "Luke, I am your father", "I'm gonna make him an offer he can't refuse", "You're gonna need a bigger boat"]).lower()
-
-    content = re.findall(r"[\w']+|[!?;~@$*()+='-]", hint) #
+    symbols = ["!","$",":",";","?","-"]
+    content = re.findall(r"[\w']+|[!$:;?-]", hint) 
 
     content = uppercase_random_word(content)
     if not has_symbol(content, symbols):
@@ -60,7 +56,6 @@ def build_password():
 
 def get_response():
     """Gets password and a hint"""
-    password, hint = build_password()
+    password, hint = build_password(hint = get_word_example(get_random_word()))
     return password, hint
 
-# print(get_response())
