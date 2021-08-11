@@ -44,7 +44,6 @@ def build_password(hint = get_word_example(get_random_word())):
     """Builds secure password"""
     symbols = ["!","$",":",";","?","-"]
     content = re.findall(r"[\w']+|[!$:;?-]", hint) 
-
     content = uppercase_random_word(content)
     if not has_symbol(content, symbols):
         content = add_symbol(content, symbols)
@@ -58,4 +57,3 @@ def get_response():
     """Gets password and a hint"""
     password, hint = build_password(hint = get_word_example(get_random_word()))
     return password, hint
-
