@@ -42,8 +42,8 @@ def get_first_letters(content):
 
 def build_password(hint = get_word_example(get_random_word())):
     """Builds secure password"""
-    symbols = ["!","$",":",";","?","-"]
-    content = re.findall(r"[\w']+|[!$:;?-]", hint) 
+    symbols = ["!", "$", "'" , ":" , ";" , "?" , "-"]
+    content = re.findall(r"[\w']+|[!$':;?-]", hint) 
     content = uppercase_random_word(content)
     if not has_symbol(content, symbols):
         content = add_symbol(content, symbols)
